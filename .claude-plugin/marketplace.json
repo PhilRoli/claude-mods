@@ -1,0 +1,5 @@
+{
+  "name": "traintracker-claude",
+  "owner": { "name": "Philipp Rolinek" },
+  "plugins": [{ "name": "train-pause", "source": "./" }]
+}
