@@ -1,5 +1,8 @@
 {
-  "name": "traintracker-claude",
+  "name": "claude-mods",
   "owner": { "name": "Philipp Rolinek" },
-  "plugins": [{ "name": "train-pause", "source": "./" }]
+  "plugins": [
+    { "name": "train-pause", "source": "./plugins/train-pause" },
+    { "name": "session-limit-pause", "source": "./plugins/session-limit-pause" }
+  ]
 }

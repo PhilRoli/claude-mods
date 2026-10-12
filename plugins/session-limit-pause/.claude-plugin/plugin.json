@@ -1,0 +1,8 @@
+{
+  "name": "session-limit-pause",
+  "version": "0.1.0",
+  "description": "Tells Claude to wrap up when the 5-hour or weekly usage window is nearly used.",
+  "author": {
+    "name": "Philipp Rolinek"
+  }
+}
