@@ -28,7 +28,7 @@ export const register: Register = on => {
     const error = await setDisabled($, want)
     if (error) {
       return {
-        text: `nosleep failed: ${error}\nAllow it once: echo "$USER ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep *" | sudo tee /etc/sudoers.d/nosleep`,
+        text: `nosleep failed: ${error}\nAllow it once: echo "$USER ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep 1, /usr/bin/pmset -a disablesleep 0" | sudo tee /etc/sudoers.d/nosleep >/dev/null && sudo chmod 0440 /etc/sudoers.d/nosleep && sudo visudo -cf /etc/sudoers.d/nosleep`,
       }
     }
     return { text: want ? 'Lid-closed sleep disabled until this session ends (or /nosleep off).' : 'Sleep restored.' }

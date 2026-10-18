@@ -45,7 +45,7 @@ ends. `/nosleep on|off` sets it explicitly; the status line shows `lid-closed aw
 macOS only. One-time setup so `sudo` doesn't prompt:
 
 ```
-echo "$USER ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep *" | sudo tee /etc/sudoers.d/nosleep
+echo "$USER ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep 1, /usr/bin/pmset -a disablesleep 0" | sudo tee /etc/sudoers.d/nosleep >/dev/null && sudo chmod 0440 /etc/sudoers.d/nosleep && sudo visudo -cf /etc/sudoers.d/nosleep
 ```
 
 A hard-killed session leaves sleep disabled until the next session starts (or `sudo pmset -a disablesleep 0`).
