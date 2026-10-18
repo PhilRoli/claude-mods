@@ -32,3 +32,20 @@ A window that resets within 5 minutes is ignored. Needs a subscription (the engi
 ```
 
 Tune with `WRAP_UP_PERCENT` and `IGNORE_IF_RESET_WITHIN_MIN` in `plugins/session-limit-pause/hooks/register.ts`.
+
+## nosleep
+
+`/nosleep` keeps the Mac awake with the lid closed (`pmset -a disablesleep 1`) and restores sleep when the session
+ends. `/nosleep on|off` sets it explicitly; the status line shows `lid-closed awake` while active.
+
+```
+/plugin install nosleep@claude-mods
+```
+
+macOS only. One-time setup so `sudo` doesn't prompt:
+
+```
+echo "$USER ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep *" | sudo tee /etc/sudoers.d/nosleep
+```
+
+A hard-killed session leaves sleep disabled until the next session starts (or `sudo pmset -a disablesleep 0`).
