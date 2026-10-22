@@ -33,23 +33,15 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('prompt.compose', async ($, e, next) => {
-    const res = await next(e)
+  // prompt.compose is bypassed by cc-plugin-sec-default, so attach the nudge as hidden prompt context
+  on('prompt.submit', async ($, e, next) => {
     const left = await check($)
-    if (left === undefined) return res
-    return {
-      sections: [
-        ...res.sections,
-        {
-          id: `${$.plugin.name}:wrap-up`,
-          scope: 'session',
-          text:
-            `The user's train arrives in about ${left} minute(s) and they will lose their connection and must stop. ` +
-            `Do not start new work. Finish the current step only if it can be done in a minute or two, leave the code in a ` +
-            `consistent, working state (no half-applied edits), commit or note progress if appropriate, then stop and tell ` +
-            `the user briefly what is done and what remains so they can resume later.`,
-        },
-      ],
-    }
+    if (left === undefined) return next(e)
+    const text =
+      `The user's train arrives in about ${left} minute(s) and they will lose their connection and must stop. ` +
+      `Do not start new work. Finish the current step only if it can be done in a minute or two, leave the code in a ` +
+      `consistent, working state (no half-applied edits), commit or note progress if appropriate, then stop and tell ` +
+      `the user briefly what is done and what remains so they can resume later.`
+    return next({ ...e, context: [...(e.context ?? []), text] })
   })
 }

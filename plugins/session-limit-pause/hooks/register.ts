@@ -26,23 +26,15 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('prompt.compose', async ($, e, next) => {
-    const res = await next(e)
+  // prompt.compose is bypassed by cc-plugin-sec-default, so attach the nudge as hidden prompt context
+  on('prompt.submit', async ($, e, next) => {
     const hit = nearLimit((await $.session.usage()).rateLimits, await $.clock.now())
-    if (!hit) return res
-    return {
-      sections: [
-        ...res.sections,
-        {
-          id: `${$.plugin.name}:wrap-up`,
-          scope: 'session',
-          text:
-            `The user's ${describe(hit)}; they are about to be cut off. ` +
-            `Do not start new work. Finish the current step only if it can be done in a minute or two, leave the code in a ` +
-            `consistent, working state (no half-applied edits), commit or note progress if appropriate, then stop and tell ` +
-            `the user briefly what is done and what remains so they can resume after the limit resets.`,
-        },
-      ],
-    }
+    if (!hit) return next(e)
+    const text =
+      `The user's ${describe(hit)}; they are about to be cut off. ` +
+      `Do not start new work. Finish the current step only if it can be done in a minute or two, leave the code in a ` +
+      `consistent, working state (no half-applied edits), commit or note progress if appropriate, then stop and tell ` +
+      `the user briefly what is done and what remains so they can resume after the limit resets.`
+    return next({ ...e, context: [...(e.context ?? []), text] })
   })
 }
